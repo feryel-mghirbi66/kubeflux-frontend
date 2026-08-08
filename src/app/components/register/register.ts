@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -19,23 +19,33 @@ export class Register {
   success = false;
   loading = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
- submit() {
-  this.loading = true;
-  this.message = '';
-  this.authService.register(this.email, this.password, this.role).subscribe({
-    next: () => {
-      this.loading = false;
-      this.success = true;
-      this.message = 'Compte créé. Vous pouvez vous connecter.';
-      setTimeout(() => this.router.navigate(['/login']), 1200);
-    },
-    error: (err) => {
-      this.loading = false;
-      this.success = false;
-      this.message = err.error || 'Une erreur est survenue.';
-    }
-  });
-}
+  submit() {
+    this.loading = true;
+    this.message = '';
+
+    this.authService.register(this.email, this.password, this.role).subscribe({
+      next: () => {
+        this.loading = false;
+        this.success = true;
+        this.message = 'Compte créé. Redirection vers la connexion...';
+        this.cdr.detectChanges();
+
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 1200);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.success = false;
+        this.message = err.error?.message || 'Cet email est déjà utilisé.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
 }
