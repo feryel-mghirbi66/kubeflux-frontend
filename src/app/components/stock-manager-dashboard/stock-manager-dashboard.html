@@ -1,0 +1,90 @@
+<div class="header-row">
+  <div>
+    <h2>Gestion du stock</h2>
+    <p class="subtitle">Ajoutez un produit ou ajustez une quantité existante.</p>
+  </div>
+  <button class="btn btn-outline" (click)="loadStock()">Rafraîchir</button>
+</div>
+
+<div class="layout">
+  <div class="card form-card">
+    <h3 class="form-title">{{ editingExisting ? 'Modifier le produit' : 'Nouveau produit' }}</h3>
+
+    <form (ngSubmit)="submit()">
+      <label>
+        Identifiant produit
+        <input [(ngModel)]="productId" name="productId" placeholder="ex. laptop-1"
+               [disabled]="editingExisting" required>
+      </label>
+
+      <label>
+        Quantité disponible
+        <input [(ngModel)]="quantity" name="quantity" type="number" min="0" required>
+      </label>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="saving">
+          {{ saving ? 'Enregistrement…' : (editingExisting ? 'Mettre à jour' : 'Créer') }}
+        </button>
+        <button *ngIf="editingExisting" type="button" class="btn btn-ghost" (click)="resetForm()">
+          Annuler
+        </button>
+      </div>
+    </form>
+
+    <p *ngIf="message" class="feedback" [class.success]="success" [class.error]="!success">
+      {{ message }}
+    </p>
+  </div>
+
+  <div class="card table-card">
+    <div class="table-header">
+      <h3 class="form-title">Produits en stock</h3>
+    </div>
+
+    <p *ngIf="loading" class="hint">Chargement…</p>
+    <p *ngIf="error" class="feedback error">{{ error }}</p>
+
+    <table *ngIf="!loading && stocks.length > 0">
+      <thead>
+        <tr>
+          <th>Produit</th>
+          <th>Quantité</th>
+          <th>Niveau</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let stock of stocks">
+          <td class="mono">{{ stock.productId }}</td>
+          <td class="mono">{{ stock.quantityAvailable }}</td>
+          <td>
+            <span class="pill" [ngClass]="'pill-' + level(stock.quantityAvailable)">
+              {{ level(stock.quantityAvailable) === 'low' ? 'Bas' : level(stock.quantityAvailable) === 'medium' ? 'Moyen' : 'OK' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button class="btn-link" (click)="editProduct(stock)">Modifier</button>
+            <button class="btn-link danger" (click)="askDelete(stock.productId)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty" *ngIf="!loading && stocks.length === 0">
+      Aucun produit enregistré pour le moment.
+    </div>
+  </div>
+  <div class="modal-overlay" *ngIf="pendingDeleteId" (click)="cancelDelete()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <h3>Supprimer « {{ pendingDeleteId }} » ?</h3>
+    <p class="modal-text">Ce produit disparaîtra du stock pour tous les utilisateurs.</p>
+    <div class="modal-actions">
+      <button class="btn-ghost" (click)="cancelDelete()" [disabled]="deleting">Annuler</button>
+      <button class="btn-danger" (click)="confirmDelete()" [disabled]="deleting">
+        {{ deleting ? 'Suppression…' : 'Supprimer' }}
+      </button>
+    </div>
+  </div>
+</div>
+</div>

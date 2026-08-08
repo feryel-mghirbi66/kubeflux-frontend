@@ -1,0 +1,31 @@
+<h2>Nouvelle commande</h2>
+<p class="subtitle">Publie un événement <code>order_created</code> sur Kafka.</p>
+
+<form (ngSubmit)="submit()" class="card form-card">
+  <label>
+    Produit
+    <input [(ngModel)]="order.productId" name="productId" placeholder="ex. laptop-1" required>
+  </label>
+
+  <label>
+    Quantité
+    <input [(ngModel)]="order.quantity" name="quantity" type="number" min="1" required>
+  </label>
+
+  <label>
+    Client
+    <input [(ngModel)]="order.customerId" name="customerId" placeholder="ex. cust-123" required>
+  </label>
+
+  <button type="submit" class="btn btn-primary" [disabled]="saving">
+    {{ saving ? 'Envoi…' : 'Passer la commande' }}
+  </button>
+</form>
+
+<div *ngIf="message" class="feedback-card" [class.success]="success" [class.error]="!success">
+  <span class="feedback-icon">{{ success ? '✓' : '✕' }}</span>
+  <div class="feedback-body">
+    <span class="feedback-title">{{ success ? 'Commande créée' : 'Échec de la création' }}</span>
+    <span class="feedback-detail">{{ message }}</span>
+  </div>
+</div>

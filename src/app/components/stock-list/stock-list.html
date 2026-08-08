@@ -1,0 +1,24 @@
+<div class="header-row">
+  <div>
+    <h2>Stock</h2>
+    <p class="subtitle">État courant tenu à jour par Inventory Service.</p>
+  </div>
+  <button class="btn btn-outline" (click)="loadStock()">Rafraîchir</button>
+</div>
+
+<p *ngIf="loading" class="hint">Chargement…</p>
+<p *ngIf="error" class="feedback error">{{ error }}</p>
+
+<div class="stock-grid" *ngIf="!loading && stocks.length > 0">
+  <div class="stock-card" *ngFor="let stock of stocks">
+    <div class="stock-name">{{ stock.productId }}</div>
+    <div class="stock-qty mono">{{ stock.quantityAvailable }}</div>
+    <span class="pill" [ngClass]="'pill-' + level(stock.quantityAvailable)">
+      {{ level(stock.quantityAvailable) === 'low' ? 'Stock bas' : level(stock.quantityAvailable) === 'medium' ? 'Stock moyen' : 'Stock ok' }}
+    </span>
+  </div>
+</div>
+
+<div class="empty" *ngIf="!loading && stocks.length === 0">
+  Aucun produit en stock pour le moment.
+</div>

@@ -1,0 +1,38 @@
+<div class="auth-page">
+  <div class="card auth-card">
+    <h2>Créer un compte</h2>
+    <p class="subtitle">Rejoignez KubeFlux en tant qu'utilisateur ou gestionnaire de stock.</p>
+
+    <form (ngSubmit)="submit()">
+      <label>
+        Email
+        <input [(ngModel)]="email" name="email" type="email" required>
+      </label>
+
+      <label>
+        Mot de passe
+        <input [(ngModel)]="password" name="password" type="password" required>
+      </label>
+
+      <label>
+        Rôle
+        <select [(ngModel)]="role" name="role">
+          <option value="USER">Utilisateur simple</option>
+          <option value="STOCK_MANAGER">Gestionnaire de stock</option>
+        </select>
+      </label>
+
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ loading ? 'Création…' : 'Créer le compte' }}
+      </button>
+    </form>
+
+    <p *ngIf="message" class="feedback" [class.error]="!success" [class.success]="success">
+      {{ message }}
+    </p>
+
+    <p class="switch">
+      Déjà un compte ? <a routerLink="/login">Se connecter</a>
+    </p>
+  </div>
+</div>

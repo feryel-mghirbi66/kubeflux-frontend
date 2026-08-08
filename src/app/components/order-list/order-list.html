@@ -1,0 +1,57 @@
+<div class="header-row">
+  <div>
+    <h2>Commandes</h2>
+    <p class="subtitle">Historique des commandes publiées sur le topic <code>orders</code>.</p>
+  </div>
+  <button class="btn btn-outline" (click)="loadOrders()">Rafraîchir</button>
+</div>
+
+<p *ngIf="loading" class="hint">Chargement…</p>
+<p *ngIf="error" class="feedback error">{{ error }}</p>
+
+<div class="card table-card" *ngIf="!loading && orders.length > 0">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Produit</th>
+        <th>Qté</th>
+        <th>Client</th>
+        <th>Statut</th>
+        <th>Créée le</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders">
+        <td class="mono truncate">{{ order.orderId }}</td>
+        <td>{{ order.productId }}</td>
+        <td class="mono">{{ order.quantity }}</td>
+        <td>{{ order.customerId }}</td>
+        <td><span class="pill pill-neutral">{{ order.status }}</span></td>
+        <td class="mono muted">{{ order.createdAt | date:'short' }}</td>
+        <td>
+          <button class="btn-link danger" (click)="askDelete(order.orderId!)">Supprimer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="empty" *ngIf="!loading && orders.length === 0">
+  Aucune commande pour le moment — créez-en une depuis « Nouvelle commande ».
+</div>
+
+<!-- Modale de confirmation -->
+<div class="modal-overlay" *ngIf="pendingDeleteId" (click)="cancelDelete()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <h3>Supprimer la commande ?</h3>
+    <p class="modal-text">Cette action est définitive et ne peut pas être annulée.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" (click)="cancelDelete()" [disabled]="deleting">Annuler</button>
+      <button class="btn btn-danger" (click)="confirmDelete()" [disabled]="deleting">
+        {{ deleting ? 'Suppression…' : 'Supprimer' }}
+      </button>
+    </div>
+  </div>
+</div>

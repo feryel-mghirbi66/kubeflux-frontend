@@ -1,0 +1,28 @@
+<div class="auth-page">
+  <div class="card auth-card">
+    <h2>Connexion</h2>
+    <p class="subtitle">Accédez à votre espace KubeFlux.</p>
+
+    <form (ngSubmit)="submit()">
+      <label>
+        Email
+        <input [(ngModel)]="email" name="email" type="email" required>
+      </label>
+
+      <label>
+        Mot de passe
+        <input [(ngModel)]="password" name="password" type="password" required>
+      </label>
+
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ loading ? 'Connexion…' : 'Se connecter' }}
+      </button>
+    </form>
+
+    <p *ngIf="message" class="feedback error">{{ message }}</p>
+
+    <p class="switch">
+      Pas encore de compte ? <a routerLink="/register">Créer un compte</a>
+    </p>
+  </div>
+</div>

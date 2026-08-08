@@ -1,1 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --navy: #1B2430;
+  --navy-light: #26313F;
+  --bg: #F7F5F0;
+  --card: #FFFFFF;
+  --amber: #E8A33D;
+  --amber-dark: #C6822A;
+  --slate: #2B333D;
+  --slate-muted: #6B7480;
+  --border: #E4E0D6;
+  --success: #4C7A5E;
+  --success-bg: #E7F0EA;
+  --danger: #B4453B;
+  --danger-bg: #FBEAE8;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--slate);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--navy);
+  margin: 0 0 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+h2 { font-size: 1.5rem; }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
