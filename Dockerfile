@@ -2,8 +2,9 @@ FROM node:20 AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+RUN chmod +x node_modules/.bin/ng
 COPY . .
-RUN npm run build -- --configuration production
+RUN node_modules/.bin/ng build --configuration production
 
 FROM nginx:alpine
 COPY --from=build /app/dist/kubeflux-frontend/browser /usr/share/nginx/html
